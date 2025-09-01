@@ -1,0 +1,25 @@
+name: "process-image"
+max_batch_size: 0
+backend: "python"
+
+input [
+    {
+        name: "in:jpg"
+        data_type: TYPE_UINT8
+        dims: [ -1 ]
+    }
+]
+
+output [
+    {
+        name: "out:tensor"
+        data_type: TYPE_UINT8
+        dims: [512, 512, 3]  # row, col, chan
+    }
+]
+
+instance_group [
+    {
+        kind: KIND_CPU
+    }
+]

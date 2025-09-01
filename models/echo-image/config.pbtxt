@@ -1,0 +1,25 @@
+name: "echo-image"
+max_batch_size: 0
+backend: "python"
+
+input [
+    {
+        name: "in:jpg"
+        data_type: TYPE_UINT8
+        dims: [ -1 ]
+    }
+]
+
+output [
+    {
+        name: "out:jpg"
+        data_type: TYPE_UINT8
+        dims: [ -1 ]
+    }
+]
+
+instance_group [
+    {
+        kind: KIND_CPU
+    }
+]

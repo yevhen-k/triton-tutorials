@@ -1,0 +1,5 @@
+assets/
+models/
+Dockerfile
+sample.*
+*.pth
