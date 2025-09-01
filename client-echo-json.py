@@ -1,12 +1,10 @@
-import json
-import os
 import argparse
-from typing import Dict
+import json
 import time
+from typing import Dict
 
 import numpy as np
 import pandas as pd
-
 import tritonclient.grpc as grpcclient
 import tritonclient.utils as utils
 
@@ -65,7 +63,7 @@ if __name__ == "__main__":
     total_request = 0
     start = time.time()
     for i in range(count):
-        print(f"Progress: {i+1}/{count}", end="\r")
+        print(f"Progress: {i + 1}/{count}", end="\r")
 
         start_request = time.time()
         response_json_arr = request(
@@ -89,11 +87,11 @@ if __name__ == "__main__":
     data["Unit"].append("FPS")
 
     data["Statistic"].append("Request")
-    data["Value"].append(f"{total_request/total_sec*100:.2f}")
+    data["Value"].append(f"{total_request / total_sec * 100:.2f}")
     data["Unit"].append("%")
 
     data["Statistic"].append("Request Time")
-    data["Value"].append(f"{total_request/count*1000:.2f}")
+    data["Value"].append(f"{total_request / count * 1000:.2f}")
     data["Unit"].append("ms")
 
     df = pd.DataFrame(data=data)

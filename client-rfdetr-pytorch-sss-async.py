@@ -1,13 +1,12 @@
 import argparse
-from typing import Dict, List
-import time
 import asyncio
+import json
+import time
+from typing import Dict, List
 
+import cv2
 import numpy as np
 import pandas as pd
-import cv2
-import json
-
 import tritonclient.grpc.aio as grpcclient
 import tritonclient.utils as utils
 
@@ -18,7 +17,6 @@ async def request(
     np_data: np.ndarray,
     semaphore: asyncio.Semaphore,
 ) -> np.ndarray:
-
     np_data = np.expand_dims(np_data, axis=0)
 
     inputs = [
@@ -125,11 +123,11 @@ async def main(args: argparse.Namespace):
     data["Unit"].append("FPS")
 
     data["Statistic"].append("Request")
-    data["Value"].append(f"{total_request/total_sec*100:.2f}")
+    data["Value"].append(f"{total_request / total_sec * 100:.2f}")
     data["Unit"].append("%")
 
     data["Statistic"].append("Request Time")
-    data["Value"].append(f"{total_request/count*1000:.2f}")
+    data["Value"].append(f"{total_request / count * 1000:.2f}")
     data["Unit"].append("ms")
 
     df = pd.DataFrame(data=data)

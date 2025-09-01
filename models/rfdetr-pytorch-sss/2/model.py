@@ -1,19 +1,14 @@
-import os
-from typing import Dict, List
 import json
+from typing import Dict, List
 
-import numpy as np
 import cv2
-
+import numpy as np
+import triton_python_backend_utils as pb_utils
 from rfdetr import RFDETRMedium
 from rfdetr.util.coco_classes import COCO_CLASSES
 
-import triton_python_backend_utils as pb_utils
-import asyncio
-
 
 class TritonPythonModel:
-
     def initialize(self, args: Dict[str, str]) -> None:
         """`initialize` is called only once when the model is being loaded.
         Implementing `initialize` function is optional. This function allows
@@ -62,7 +57,6 @@ class TritonPythonModel:
         self.output_dtype = pb_utils.triton_string_to_numpy(output_config["data_type"])
 
     async def execute(self, requests) -> "List[List[pb_utils.Tensor]]":
-
         images = []
         for request in requests:
             # Get INPUT0 image
@@ -113,7 +107,6 @@ class TritonPythonModel:
             print(f">>> Batch size: {len(images)}")
             responses = []
             for detecion in detections:
-
                 predictions = []
                 for class_id, box, confidence in zip(
                     detecion.class_id, detecion.xyxy, detecion.confidence

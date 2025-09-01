@@ -1,12 +1,11 @@
 import argparse
-from typing import Dict, List
+import json
 import time
+from typing import Dict, List
 
+import cv2
 import numpy as np
 import pandas as pd
-import cv2
-import json
-
 import tritonclient.grpc as grpcclient
 import tritonclient.utils as utils
 
@@ -16,7 +15,6 @@ def request(
     grpc_client: grpcclient.InferenceServerClient,
     np_data: np.ndarray,
 ) -> np.ndarray:
-
     # NOTE: batch can be prepared manually
     # but on the servers side it won't be recognized by default
     # because it is triton who makes batches
@@ -87,7 +85,7 @@ if __name__ == "__main__":
     total_request = 0
     start = time.time()
     for i in range(count):
-        print(f"Progress: {i+1}/{count}", end="\r")
+        print(f"Progress: {i + 1}/{count}", end="\r")
 
         start_request = time.time()
 
@@ -112,11 +110,11 @@ if __name__ == "__main__":
     data["Unit"].append("FPS")
 
     data["Statistic"].append("Request")
-    data["Value"].append(f"{total_request/total_sec*100:.2f}")
+    data["Value"].append(f"{total_request / total_sec * 100:.2f}")
     data["Unit"].append("%")
 
     data["Statistic"].append("Request Time")
-    data["Value"].append(f"{total_request/count*1000:.2f}")
+    data["Value"].append(f"{total_request / count * 1000:.2f}")
     data["Unit"].append("ms")
 
     df = pd.DataFrame(data=data)
