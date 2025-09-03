@@ -1,1 +1,2 @@
-extend-select = ["I"]
+[lint]
+select = ["I", "B", "A", "F", "E", "PTH", "ANN"]

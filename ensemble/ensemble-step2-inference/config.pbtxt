@@ -1,0 +1,43 @@
+name: "ensemble-step2-inference"
+platform: "onnxruntime_onnx"
+default_model_filename: "rf-detr-medium.onnx"
+
+# onnx model with batches has:
+# image "input" (1, 3, 576, 576)
+# boxes "dets" (1, 300, 4)
+# logits "labels" (1, 300, 91)
+
+# TODO: make onnx to take batches with dynamic batching
+# max_batch_size: 32
+# dynamic_batching {
+#     preferred_batch_size: [8, 16]
+#     max_queue_delay_microseconds: 5000
+# }
+
+input [
+    {
+        name: "input"
+        data_type: TYPE_FP32
+        dims: [1, 3, 576, 576 ]
+    }
+]
+
+output [
+    {
+        name: "dets"
+        data_type: TYPE_FP32
+        dims: [ 1, 300, 4 ]
+    },
+    {
+        name: "labels"
+        data_type: TYPE_FP32
+        dims: [ 1, 300, 91 ]
+    }
+]
+
+instance_group [
+    {
+        kind: KIND_GPU
+        count: 1
+    }
+]

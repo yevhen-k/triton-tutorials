@@ -1,5 +1,7 @@
 venv/
 __pycache__/
 *.pth
+*.onnx
 sample.*
 check*
+triton_python_backend_utils.py

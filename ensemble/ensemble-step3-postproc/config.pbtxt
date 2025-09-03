@@ -1,0 +1,63 @@
+name: "ensemble-step3-postproc"
+backend: "python"
+max_batch_size: 32
+dynamic_batching {
+    preferred_batch_size: [8, 16]
+    max_queue_delay_microseconds: 5000
+}
+
+input [
+    {
+        name: "dets:postproc"
+        data_type: TYPE_FP32
+        dims: [ 300, 4 ]
+    },
+    {
+        name: "labels:postproc"
+        data_type: TYPE_FP32
+        dims: [ 300, 91 ]
+    }
+]
+
+# scores.shape=[bs, 8]
+# labels.shape=[bs, 8]
+# boxes.shape =[bs, 8, 4]
+# batch size ---^
+# num instances ---^
+# num keypoints     ---^
+output [
+    {
+        name: "scores:tensor"
+        data_type: TYPE_FP32
+        dims: [ -1 ]
+    },
+    {
+        name: "labels:tensor"
+        data_type: TYPE_FP32
+        dims: [ -1 ]
+    },
+    {
+        name: "boxes:tensor"
+        data_type: TYPE_FP32
+        dims: [ -1, 4 ]
+    }
+]
+
+parameters [
+  {
+    key: "threshold"
+    value: { string_value: "0.5" }
+  },
+  {
+    key: "class_ids"
+    value: { string_value: "1, 3" }
+  }
+]
+
+
+instance_group [
+    {
+        kind: KIND_CPU
+        count: 1
+    }
+]

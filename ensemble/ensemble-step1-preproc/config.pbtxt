@@ -1,0 +1,35 @@
+name: "ensemble-step1-preproc"
+backend: "python"
+max_batch_size: 32
+dynamic_batching {
+    preferred_batch_size: [8, 16]
+    max_queue_delay_microseconds: 5000
+}
+
+input [
+    {
+        name: "in:jpg"
+        data_type: TYPE_UINT8
+        dims: [ -1 ]
+    }
+]
+
+output [
+    {
+        name: "out:tensor"
+        data_type: TYPE_FP32
+        dims: [ 3, 576, 576 ]
+    }
+]
+
+# `count: 16` requries --shm-size 8G flag to docker run
+# but:
+# - doesn't boost FPS in sync mode
+# - requires reimplementation of preprocessing 
+#   for better vectorization in async (batch) mode
+instance_group [
+    {
+        kind: KIND_CPU
+        # count: 16
+    }
+]

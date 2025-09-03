@@ -33,6 +33,8 @@ docker push yevhenk10s/triton-pytorch-rfdetr:24.08-py3
 -  Optimizing Model Deployments with Triton Model Analyzer: https://www.youtube.com/watch?v=UU9Rh00yZMY
 -  Custom params in `config.pbtxt`: https://github.com/triton-inference-server/common/blob/2e41435a59f7fe1f5f73df5355ae7433a15a4650/protobuf/model_config.proto#L1669
 - Async inference requests: https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/user_guide/bls.html
+- Understanding Data Pipelines: https://github.com/triton-inference-server/tutorials/tree/main/Feature_Guide/Data_Pipelines
+- Deploy Triton Inference Server on Railway *by Kyryl Truskovskyi*: https://blog.railway.com/p/deploy-triton-inference-server-on-railway
 
 ## Supported Hardware by TensorRT
 - https://docs.nvidia.com/deeplearning/tensorrt/latest/getting-started/support-matrix.html
@@ -49,3 +51,26 @@ CUDA Capability Major/Minor version number:     6.1
 ```
 
 But TensorRT supports at least `7.5` compute capability.
+
+## Fixing local docker nvidia runtime
+Issue:
+```bash
+$ docker run --gpus=1 --rm --net=host -v ${PWD}/models:/models yevhenk10s/triton-pytorch-rfdetr:24.08-py3 tritonserver --model-repository=/models
+# docker: Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: error running prestart hook #0: exit status 1, stdout: , stderr: Using requested mode 'cdi'
+# invoking the NVIDIA Container Runtime Hook directly (e.g. specifying the docker --gpus flag) is not supported. Please use the NVIDIA Container Runtime (e.g. specify the --runtime=nvidia flag) instead.
+```
+
+Fix:
+```bash
+sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+sudo nvidia-ctk config --in-place --set nvidia-container-runtime.mode=cdi && systemctl restart docker
+
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+
+docker run --runtime=nvidia --rm --net=host -v ${PWD}/models:/models yevhenk10s/triton-pytorch-rfdetr:24.08-py3 tritonserver --model-repository=/models
+```
+
+### References
+- https://github.com/NVIDIA/nvidia-container-toolkit/issues/1246#issuecomment-3194219487
+- https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-docker

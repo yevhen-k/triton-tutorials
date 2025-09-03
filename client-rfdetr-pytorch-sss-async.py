@@ -38,11 +38,11 @@ async def request(
             outputs=outputs,
             model_version="2",
         )
-
+    assert results
     response_np_arr = results.as_numpy("detections:json")
     # print(results.get_response(as_json=True))
     # print(response_np_arr.shape)
-
+    assert response_np_arr
     return response_np_arr
 
 
@@ -58,7 +58,7 @@ def postprocess(image_path: str, detections: List[Dict]) -> None:
     cv2.imwrite("sample.jpg", image)
 
 
-async def main(args: argparse.Namespace):
+async def main(args: argparse.Namespace) -> None:
     benchmark = args.benchmark
     count = 1
     if benchmark:

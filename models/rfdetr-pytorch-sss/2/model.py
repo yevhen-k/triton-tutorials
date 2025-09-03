@@ -3,9 +3,10 @@ from typing import Dict, List
 
 import cv2
 import numpy as np
-import triton_python_backend_utils as pb_utils
 from rfdetr import RFDETRMedium
 from rfdetr.util.coco_classes import COCO_CLASSES
+
+import triton_python_backend_utils as pb_utils
 
 
 class TritonPythonModel:
@@ -46,6 +47,7 @@ class TritonPythonModel:
 
         # Get INPUT0 configuration
         input_config = pb_utils.get_input_config_by_name(model_config, "in:jpg")
+        assert input_config
         # Convert Triton types to numpy types
         self.input_dtype = pb_utils.triton_string_to_numpy(input_config["data_type"])
 
@@ -53,6 +55,7 @@ class TritonPythonModel:
         output_config = pb_utils.get_output_config_by_name(
             model_config, "detections:json"
         )
+        assert output_config
         # Convert Triton types to numpy types
         self.output_dtype = pb_utils.triton_string_to_numpy(output_config["data_type"])
 
