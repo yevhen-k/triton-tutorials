@@ -1,21 +1,21 @@
 name: "ensemble-step3-postproc"
 backend: "python"
-max_batch_size: 32
-dynamic_batching {
-    preferred_batch_size: [8, 16]
-    max_queue_delay_microseconds: 5000
-}
+max_batch_size: 0
+# dynamic_batching {
+#     preferred_batch_size: [8, 16]
+#     max_queue_delay_microseconds: 5000
+# }
 
 input [
     {
         name: "dets:postproc"
         data_type: TYPE_FP32
-        dims: [ 300, 4 ]
+        dims: [ -1, -1, 4 ]
     },
     {
         name: "labels:postproc"
         data_type: TYPE_FP32
-        dims: [ 300, 91 ]
+        dims: [ -1, -1, 91 ]
     }
 ]
 
@@ -29,17 +29,17 @@ output [
     {
         name: "scores:tensor"
         data_type: TYPE_FP32
-        dims: [ -1 ]
+        dims: [ -1, -1 ]
     },
     {
         name: "labels:tensor"
         data_type: TYPE_FP32
-        dims: [ -1 ]
+        dims: [ -1, -1 ]
     },
     {
         name: "boxes:tensor"
         data_type: TYPE_FP32
-        dims: [ -1, 4 ]
+        dims: [ -1, -1, 4 ]
     }
 ]
 

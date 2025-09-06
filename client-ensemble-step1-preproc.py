@@ -107,11 +107,10 @@ if __name__ == "__main__":
 
     # response shape CHW  [3, 576, 576]
     # image    shape HWC [ 576, 576, 3 ]
-    image = np.transpose(response_np_arr, (1, 2, 0))
+    print(f"{response_np_arr.shape=}")
+    image = np.transpose(response_np_arr[0], (1, 2, 0))
     image = image * stds + means
     image = image * 255.0
-
-    print(f"{image.shape=}")
 
     ok = cv2.imwrite("sample.jpg", image)
     assert ok

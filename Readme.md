@@ -7,6 +7,17 @@
 - `InferenceRequest`: [_request.py#L49](https://github.com/triton-inference-server/core/blob/70b908ca74b27407ae7c33b26ef26401d50aa871/python/tritonserver/_api/_request.py#L49)
 - `Tensor`: [_tensor.py#L64](https://github.com/triton-inference-server/core/blob/main/python/tritonserver/_api/_tensor.py#L64)
 
+### Adding Batch Dimenstion to the RF-DETR
+
+Replace [` dynamic_axes = None`](https://github.com/roboflow/rf-detr/blob/700b2117b65a3bbcd7635d7b829ddf2a4cf90124/rfdetr/main.py#L526) with:
+
+```python
+dynamic_axes = {
+    "input": {0: "batch_size"},
+    "dets": {0: "batch_size"},
+    "labels": {0: "batch_size"},
+}
+```
 
 ## Run Triton
 

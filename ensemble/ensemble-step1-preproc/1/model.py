@@ -41,11 +41,13 @@ class TritonPythonModel:
             # [x] normalize image
             # [x] change dimensions from HWC to CHW
             # [ ] add batch dimension (NOTE: should we?)
-            image = cv2.resize(image, (self.output_shape[1], self.output_shape[2]))
+
+            # image = cv2.resize(image, (self.output_shape[1], self.output_shape[2]))
+            image = cv2.resize(image, (self.output_shape[2], self.output_shape[3]))
             image = np.array(image).astype(np.float32) / 255.0
             image = ((image - self.means) / self.stds).astype(np.float32)
             image = np.transpose(image, (2, 0, 1))
-            # image = np.expand_dims(image, axis=0)
+            image = np.expand_dims(image, axis=0)
 
             out_tensor = pb_utils.Tensor("out:tensor", image.astype(self.output_dtype))
 

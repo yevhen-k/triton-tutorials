@@ -5,3 +5,4 @@ __pycache__/
 sample.*
 check*
 triton_python_backend_utils.py
+output/
