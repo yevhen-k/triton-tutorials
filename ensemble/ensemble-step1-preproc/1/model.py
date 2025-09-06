@@ -27,9 +27,10 @@ class TritonPythonModel:
         self.means = np.array([0.485, 0.456, 0.406])
         self.stds = np.array([0.229, 0.224, 0.225])
 
-    def execute(self, requests) -> "List[List[pb_utils.Tensor]]":
+    async def execute(self, requests) -> "List[List[pb_utils.Tensor]]":
         responses = []
         # for loop for batch requests (disabled in our case)
+        print(f"bs = {len(requests)}", flush=True)
         for request in requests:
             # Get INPUT0 image
             input_tensor = pb_utils.get_input_tensor_by_name(request, "in:jpg")
@@ -42,8 +43,8 @@ class TritonPythonModel:
             # [x] change dimensions from HWC to CHW
             # [ ] add batch dimension (NOTE: should we?)
 
-            # image = cv2.resize(image, (self.output_shape[1], self.output_shape[2]))
-            image = cv2.resize(image, (self.output_shape[2], self.output_shape[3]))
+            image = cv2.resize(image, (self.output_shape[1], self.output_shape[2]))
+            # image = cv2.resize(image, (self.output_shape[2], self.output_shape[3]))
             image = np.array(image).astype(np.float32) / 255.0
             image = ((image - self.means) / self.stds).astype(np.float32)
             image = np.transpose(image, (2, 0, 1))

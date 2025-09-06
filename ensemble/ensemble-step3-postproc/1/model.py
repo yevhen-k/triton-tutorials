@@ -65,7 +65,7 @@ class TritonPythonModel:
         print(f"{self.class_ids=}")
         print(f"{self.threshold=}")
 
-    def execute(self, requests) -> "List[List[pb_utils.Tensor]]":
+    async def execute(self, requests) -> "List[List[pb_utils.Tensor]]":
         responses = []
         # for loop for batch requests (disabled in our case)
         for request in requests:
@@ -101,6 +101,8 @@ class TritonPythonModel:
             )
 
             responses.append(inference_response)
+
+        print(f"post: {len(responses)}")
 
         return responses
 

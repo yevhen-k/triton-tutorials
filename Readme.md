@@ -19,6 +19,8 @@ dynamic_axes = {
 }
 ```
 
+In the ensemble mode with batches, ensemble input `"ensemble:in:jpg"` **must** have batch dimension in the first `dims` position. **BUT ensemble outputs** `"ensemble:scores:tensor"`, `"ensemble:labels:tensor"`, and `"ensemble:boxes:tensor"` **DOESN'T**!
+
 ## Run Triton
 
 ```bash
