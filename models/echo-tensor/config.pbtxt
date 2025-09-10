@@ -1,0 +1,26 @@
+name: "echo-tensor"
+max_batch_size: 0
+backend: "python"
+
+input [
+    {
+        name: "input:tensor"
+        data_type: TYPE_FP32
+        dims: [ 2, 3 ]
+    }
+]
+
+output [
+    {
+        name: "output:tensor"
+        data_type: TYPE_FP32
+        dims: [ 2, 3 ]
+    }
+]
+
+instance_group [
+    {
+      count: 1
+      kind: KIND_CPU
+    }
+]
