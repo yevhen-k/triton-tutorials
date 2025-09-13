@@ -2,6 +2,7 @@ rfdetr @ git+https://github.com/roboflow/rf-detr.git
 av==15.0.0
 tabulate
 pandas
+tritonclient[all]
 # specific versions for my 1050Ti
 torch==2.5.1
 torchvision==0.20.1
