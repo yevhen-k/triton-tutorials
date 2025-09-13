@@ -1,6 +1,7 @@
 import argparse
 import json
 import time
+from pathlib import Path
 from typing import Dict
 
 import numpy as np
@@ -55,7 +56,7 @@ if __name__ == "__main__":
     grpc_client = grpcclient.InferenceServerClient(url="localhost:8001", verbose=False)
     model_name = "echo-json"
 
-    with open("assets/dummy.json", "rb") as f:
+    with Path.open(Path("assets/dummy.json"), "rb") as f:
         data = f.read()
 
     np_data = np.frombuffer(data, dtype=np.uint8)
@@ -98,5 +99,5 @@ if __name__ == "__main__":
     print(df.to_markdown(index=False))
 
     resp_json = postprocessing(response_json_arr)
-    with open("sample.json", "wt", encoding="utf-8") as f:
+    with Path.open(Path("sample.json"), "wt", encoding="utf-8") as f:
         json.dump(resp_json, f, indent=2)
