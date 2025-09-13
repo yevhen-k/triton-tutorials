@@ -2,6 +2,7 @@ import json
 from typing import Dict, List
 
 import numpy as np
+
 import triton_python_backend_utils as pb_utils
 
 
@@ -14,10 +15,10 @@ class TritonPythonModel:
         )
         self.output_dtype = pb_utils.triton_string_to_numpy(output_config["data_type"])
 
-    def execute(self, requests) -> "List[List[pb_utils.Tensor]]":
-        output_dtype = self.output_dtype
+    def execute(
+        self, requests: "List[pb_utils.InferenceRequest]"
+    ) -> "List[pb_utils.InferenceResponse]":
         responses = []
-        # for loop for batch requests (disabled in our case)
         for request in requests:
             # Get input
             input_tensor = pb_utils.get_input_tensor_by_name(request, "config:json")
@@ -31,7 +32,9 @@ class TritonPythonModel:
             # Prepare response
             json_string = json.dumps(input_json)
             outputs = np.frombuffer(json_string.encode(), dtype=np.uint8)
-            out_tensor = pb_utils.Tensor("response:json", outputs.astype(output_dtype))
+            out_tensor = pb_utils.Tensor(
+                "response:json", outputs.astype(self.output_dtype)
+            )
 
             inference_response = pb_utils.InferenceResponse(output_tensors=[out_tensor])
 

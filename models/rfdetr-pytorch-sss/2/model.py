@@ -59,7 +59,9 @@ class TritonPythonModel:
         # Convert Triton types to numpy types
         self.output_dtype = pb_utils.triton_string_to_numpy(output_config["data_type"])
 
-    async def execute(self, requests) -> "List[List[pb_utils.Tensor]]":
+    async def execute(
+        self, requests: "List[pb_utils.InferenceRequest]"
+    ) -> "List[pb_utils.InferenceResponse]":
         images = []
         for request in requests:
             # Get INPUT0 image

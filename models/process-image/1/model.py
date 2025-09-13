@@ -3,6 +3,7 @@ from typing import Dict, List
 
 import cv2
 import numpy as np
+
 import triton_python_backend_utils as pb_utils
 
 
@@ -22,7 +23,9 @@ class TritonPythonModel:
         # Get OUTPUT0 dimensions
         self.output_shape = output_config["dims"]
 
-    def execute(self, requests) -> "List[List[pb_utils.Tensor]]":
+    def execute(
+        self, requests: "List[pb_utils.InferenceRequest]"
+    ) -> "List[pb_utils.InferenceResponse]":
         output_dtype = self.output_dtype
         output_shape = self.output_shape
 

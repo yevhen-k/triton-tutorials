@@ -3,9 +3,10 @@ from typing import Dict, List
 
 import cv2
 import numpy as np
-import triton_python_backend_utils as pb_utils
 from rfdetr import RFDETRMedium
 from rfdetr.util.coco_classes import COCO_CLASSES
+
+import triton_python_backend_utils as pb_utils
 
 
 class TritonPythonModel:
@@ -58,7 +59,9 @@ class TritonPythonModel:
         # Convert Triton types to numpy types
         self.output_dtype = pb_utils.triton_string_to_numpy(output_config["data_type"])
 
-    def execute(self, requests) -> "List[List[pb_utils.Tensor]]":
+    def execute(
+        self, requests: "List[pb_utils.InferenceRequest]"
+    ) -> "List[pb_utils.InferenceResponse]":
         images = []
         for request in requests:
             # Get INPUT0 image

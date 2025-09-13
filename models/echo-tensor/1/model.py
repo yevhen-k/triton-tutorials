@@ -16,7 +16,9 @@ class TritonPythonModel:
         self.output_dtype = pb_utils.triton_string_to_numpy(output_config["data_type"])
         self.output_shape = output_config["dims"]
 
-    def execute(self, requests) -> "List[List[pb_utils.Tensor]]":
+    def execute(
+        self, requests: "List[pb_utils.InferenceRequest]"
+    ) -> "List[pb_utils.InferenceResponse]":
         responses = []
         # for loop for batch requests (disabled in our case)
         for request in requests:
