@@ -24,8 +24,6 @@ class TritonPythonModel:
     def execute(
         self, requests: "List[pb_utils.InferenceRequest]"
     ) -> "List[pb_utils.InferenceResponse]":
-        output_dtype = self.output_dtype
-
         responses = []
         # for loop for batch requests (disabled in our case)
         for request in requests:
@@ -36,8 +34,10 @@ class TritonPythonModel:
 
             # Prepare output
             # outputs = np.frombuffer(image.tobytes(), dtype=np.uint8)
-            # out_tensor = pb_utils.Tensor("out:jpg", outputs.astype(output_dtype))
-            out_tensor = pb_utils.Tensor("out:jpg", image.astype(output_dtype))
+            # out_tensor = pb_utils.Tensor("out:jpg", outputs.astype(self.output_dtype))
+            ret, buf = cv2.imencode("image.jpg", image)
+            np_data = np.frombuffer(buf, dtype=np.uint8)
+            out_tensor = pb_utils.Tensor("out:jpg", np_data.astype(self.output_dtype))
 
             inference_response = pb_utils.InferenceResponse(output_tensors=[out_tensor])
 

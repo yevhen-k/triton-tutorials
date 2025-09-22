@@ -1,5 +1,6 @@
 import argparse
 import time
+from pathlib import Path
 from typing import List
 
 import cv2
@@ -56,7 +57,7 @@ if __name__ == "__main__":
     grpc_client = grpcclient.InferenceServerClient(url="localhost:8001", verbose=False)
     model_name = "echo-image"
 
-    with open("assets/bus.jpg", "rb") as f:
+    with Path.open(Path("assets/bus.jpg"), "rb") as f:
         data = f.read()
 
     np_data = np.frombuffer(data, dtype=np.uint8)
@@ -98,5 +99,7 @@ if __name__ == "__main__":
     df = pd.DataFrame(data=data)
     print(df.to_markdown(index=False))
 
-    ok = cv2.imwrite("sample.jpg", image)
-    assert ok
+    # ok = cv2.imwrite("sample.jpg", image)
+    # assert ok
+    with Path.open(Path("sample.jpg"), "wb") as f:
+        f.write(image.tobytes())
