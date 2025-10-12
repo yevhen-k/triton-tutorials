@@ -2,6 +2,7 @@ import argparse
 import asyncio
 import json
 import time
+from pathlib import Path
 from typing import Dict, List
 
 import cv2
@@ -65,10 +66,10 @@ async def main(args: argparse.Namespace) -> None:
         count = 1000
 
     grpc_client = grpcclient.InferenceServerClient(url="localhost:8001", verbose=False)
-    model_name = "rfdetr-pytorch-sss"
+    model_name = "rfdetr-pytorch"
 
     image_path = "assets/bus.jpg"
-    with open(image_path, "rb") as f:
+    with Path.open(Path(image_path), "rb") as f:
         data = f.read()
 
     np_data = np.frombuffer(data, dtype=np.uint8)
@@ -139,7 +140,6 @@ async def main(args: argparse.Namespace) -> None:
 
 
 if __name__ == "__main__":
-    # assert False, "UNIMPLEMENTED: needs to implement async on the triton server side"
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--benchmark",

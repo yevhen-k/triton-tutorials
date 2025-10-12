@@ -1,4 +1,4 @@
-name: "rfdetr-pytorch-sss"
+name: "rfdetr-pytorch"
 backend: "python"
 max_batch_size: 32
 dynamic_batching {
