@@ -111,10 +111,10 @@ class TritonPythonModel:
         else:
             print(f">>> Batch size: {len(images)}")
             responses = []
-            for detecion in detections:
+            for detection in detections:
                 predictions = []
                 for class_id, box, confidence in zip(
-                    detecion.class_id, detecion.xyxy, detecion.confidence
+                    detection.class_id, detection.xyxy, detection.confidence
                 ):
                     # Get box coordinates
                     x1, y1, x2, y2 = box
