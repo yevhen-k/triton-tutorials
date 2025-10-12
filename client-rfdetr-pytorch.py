@@ -40,7 +40,12 @@ def request(
         grpcclient.InferRequestedOutput("detections:json"),
     ]
 
-    results = grpc_client.infer(model_name, inputs, outputs=outputs)
+    results = grpc_client.infer(
+        model_name,
+        inputs,
+        outputs=outputs,
+        model_version="1",
+    )
 
     response_np_arr = results.as_numpy("detections:json")
 
